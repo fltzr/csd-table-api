@@ -1,17 +1,17 @@
-import { StrictMode } from 'react';
+import { StrictMode, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-
-import { Providers } from './providers';
 import { router } from './common/router';
 
-import '@cloudscape-design/global-styles/index.css';
-import './index.css';
 import './normalize.css';
+import './index.scss';
+import '@cloudscape-design/global-styles/index.css';
 
-const container: HTMLElement | null = document.querySelector('#root');
+const container: HTMLElement | null = document.querySelector('#c');
 
 if (container) {
+  const Providers = lazy(() => import('./providers'));
+
   createRoot(container).render(
     <StrictMode>
       <Providers>
