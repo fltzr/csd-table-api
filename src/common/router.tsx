@@ -7,7 +7,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '/table',
-        lazy: () => import('../pages/table'),
+        lazy: () => import('../budget-items/pages/overview'),
       },
     ],
   },
