@@ -1,8 +1,9 @@
+import { useCallback, useMemo, useState } from 'react';
+import { capitalize, isEmpty } from 'lodash-es';
+
 import Pagination from '@cloudscape-design/components/pagination';
 import PropertyFilter from '@cloudscape-design/components/property-filter';
 import Table from '@cloudscape-design/components/table';
-import { capitalize, isEmpty } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
 
 import { FullPageHeader, type FullPageHeaderProps } from './common/components/table-header';
 import { ManualRefresh } from './common/components/table-manual-refresh-button';

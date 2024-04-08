@@ -1,8 +1,9 @@
+import type { ReactNode } from 'react';
+
 import Box from '@cloudscape-design/components/box';
 import Button, { type ButtonProps } from '@cloudscape-design/components/button';
 import Header, { type HeaderProps } from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
-import type { ReactNode } from 'react';
 
 import { InfoLink } from '../../../info-link';
 
@@ -31,10 +32,10 @@ export const FullPageHeader = ({
   <Box margin={{ top: 'm', bottom: 'xs' }}>
     <Header
       {...props}
-      variant="awsui-h1-sticky"
+      variant='awsui-h1-sticky'
       info={onInfoLinkClick && <InfoLink onFollow={onInfoLinkClick} />}
       actions={
-        <SpaceBetween size="xs" direction="horizontal">
+        <SpaceBetween size='xs' direction='horizontal'>
           {extraActions}
           {actionButtons?.map((action) => (
             <Button

@@ -2,92 +2,120 @@ import { useState } from 'react';
 
 import Table from '../../common/components/table';
 import { useBudgetItemCatalog } from '../hooks';
-import { BudgetItemCatalog } from '../types';
+import { BudgetItemSummary } from '../types';
 import { TableColumnDefinition } from '../../common/types/table';
+import Input from '@cloudscape-design/components/input';
 
-const budgetItemCatalogColumnDefinitions: TableColumnDefinition<BudgetItemCatalog>[] = [
+const budgetItemSummaryColumnDefinitions: TableColumnDefinition<BudgetItemSummary>[] = [
   {
     id: 'id',
+    sortingField: 'id',
     header: 'id',
     cell: (item) => item.id,
     width: 100,
   },
   {
     id: 'name',
+    sortingField: 'name',
     header: 'Name',
     cell: (item) => item.name,
     width: 150,
     editConfig: {
       editingCell: (item, { currentValue, setValue }) => (
-        <input
+        <Input
           type='text'
           value={currentValue ?? item.name}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(event) => setValue(event.detail.value)}
         />
       ),
+      validation: (item, value) => {
+        console.log(`item: ${JSON.stringify(item, null, 2)}`);
+        console.log(`value: ${JSON.stringify(value, null, 2)}`);
+
+        return 'Valid';
+      },
     },
   },
   {
     id: 'amount',
+    sortingField: 'amount',
     header: 'Amount',
     cell: (item) => item.amount,
     width: 150,
     editConfig: {
       editingCell: (item, { currentValue, setValue }) => (
-        <input
+        <Input
           type='number'
           value={currentValue ?? item.amount}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(event) => setValue(event.detail.value)}
         />
       ),
     },
   },
   {
     id: 'financeCategoryName',
-    header: 'financeCategoryName',
+    sortingField: 'financeCategoryName',
+    header: 'Category',
     cell: (item) => item.financeCategoryName,
     width: 150,
     editConfig: {
       editingCell: (item, { currentValue, setValue }) => (
-        <input
+        <Input
           type='text'
           value={currentValue ?? item.financeCategoryName}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(event) => setValue(event.detail.value)}
         />
       ),
     },
   },
   {
-    id: 'userDefinedCategoryName',
-    header: 'User Defined Category',
-    cell: (item) => item.userDefinedCategoryName,
+    id: 'userDefinedLabelName',
+    sortingField: 'userDefinedLabelName',
+    header: 'Label',
+    cell: (item) => item.userDefinedLabelName,
     width: 150,
     editConfig: {
+      ariaLabel: 'User Defined Label Name',
       editingCell: (item, { currentValue, setValue }) => (
-        <input
+        <Input
           type='text'
-          value={currentValue ?? item.userDefinedCategoryName}
-          onChange={(e) => setValue(e.target.value)}
+          value={currentValue ?? item.userDefinedLabelName}
+          onChange={(event) => setValue(event.detail.value)}
         />
       ),
+      constraintText: 'User Defined Label Name must be a string',
+      editIconAriaLabel: 'Edit User Defined Label Name',
     },
   },
 ];
 
+const isKeyOfBudgetItemSummary = (
+  key: string,
+  item: BudgetItemSummary,
+): key is keyof BudgetItemSummary => key in item;
+
 const BudgetItemsOverview = () => {
-  const [selectedItems, setSelectedItems] = useState<BudgetItemCatalog[]>([]);
+  const [selectedItems, setSelectedItems] = useState<BudgetItemSummary[]>([]);
   const budgetItemsCatalogApi = useBudgetItemCatalog();
 
   return (
-    <Table<BudgetItemCatalog>
+    <Table<BudgetItemSummary>
       items={budgetItemsCatalogApi.useReadQuery.data?.items}
       selectedItems={selectedItems}
       setSelectedItems={setSelectedItems}
-      columnDefinitions={budgetItemCatalogColumnDefinitions}
-      localstorageKeyPrefix={'BudgetItemsCatalog'}
-      resource={'budget item'}
+      columnDefinitions={budgetItemSummaryColumnDefinitions}
+      loading={budgetItemsCatalogApi.useReadQuery.isLoading}
+      loadingText='Loading budget items...'
+      variant='borderless'
+      localstorageKeyPrefix='BudgetItemsCatalog'
+      resource='budget item'
       onSubmitEdit={(item, column, newValue) => {
-        console.log('onSubmitEdit', item, column, newValue);
+        // const columnId = String(column.id);
+        // const updatedItem = { [columnId]: newValue };
+        // if (isKeyOfBudgetItemSummary(columnId, item)) {
+        //   console.log(`Original item: ${JSON.stringify(item[columnId], null, 2)}`);
+        //   console.log(`Updated item: ${JSON.stringify(updatedItem, null, 2)}`);
+        // }
       }}
     />
   );

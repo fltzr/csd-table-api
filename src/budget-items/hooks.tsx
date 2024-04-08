@@ -1,25 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { UpdateParams } from '../common/types/api-types';
-import type { BaseBudgetItem, FinanceCategory, UserDefinedCategory } from './types';
-import {
-  BudgetItemCatalogApi,
-  BaseBudgetItemApi,
-  FinanceCategoryApi,
-  UserDefinedCategoryApi,
-} from './api';
+import type { BudgetItem, FinanceCategory, UserDefinedLabel } from './types';
+import { BudgetItemSummaryApi, BudgetItemApi, FinanceCategoryApi, UserDefinedLabelApi } from './api';
 
 // Budget item catalog hook
 export const useBudgetItemCatalog = () => {
   const useReadQuery = useQuery({
     queryKey: ['budget-item-catalog'],
-    queryFn: BudgetItemCatalogApi.read,
+    queryFn: BudgetItemSummaryApi.read,
     initialData: { items: [], totalCount: 0 },
     retry: false,
   });
   const useReadByIdQuery = (id: string) =>
     useQuery({
       queryKey: ['budget-item-catalog', id],
-      queryFn: () => BudgetItemCatalogApi.readById(id),
+      queryFn: () => BudgetItemSummaryApi.readById(id),
     });
 
   return {
@@ -29,30 +24,30 @@ export const useBudgetItemCatalog = () => {
 };
 
 // Base budget item hook
-export const useBaseBudgetItems = () => {
+export const useBudgetItems = () => {
   const queryClient = useQueryClient();
 
-  const useReadQuery = useQuery({ queryKey: ['base-budget-items'], queryFn: BaseBudgetItemApi.read });
+  const useReadQuery = useQuery({ queryKey: ['base-budget-items'], queryFn: BudgetItemApi.read });
 
   const useReadByIdQuery = (id: string) =>
-    useQuery({ queryKey: ['base-budget-items', id], queryFn: () => BaseBudgetItemApi.readById(id) });
+    useQuery({ queryKey: ['base-budget-items', id], queryFn: () => BudgetItemApi.readById(id) });
 
   const useCreateMutation = useMutation({
-    mutationFn: (data: BaseBudgetItem) => BaseBudgetItemApi.create(data),
+    mutationFn: (data: BudgetItem) => BudgetItemApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['base-budget-items'] });
     },
   });
 
   const useUpdateMutation = useMutation({
-    mutationFn: ({ id, data }: UpdateParams<BaseBudgetItem>) => BaseBudgetItemApi.update({ id, data }),
+    mutationFn: ({ id, data }: UpdateParams<BudgetItem>) => BudgetItemApi.update({ id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['base-budget-items'] });
     },
   });
 
   const useDeleteMutation = useMutation({
-    mutationFn: (id: string) => BaseBudgetItemApi.delete(id),
+    mutationFn: (id: string) => BudgetItemApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['base-budget-items'] });
     },
@@ -112,32 +107,32 @@ export const useUserDefinedCategories = () => {
 
   const useReadQuery = useQuery({
     queryKey: ['user-defined-categories'],
-    queryFn: UserDefinedCategoryApi.read,
+    queryFn: UserDefinedLabelApi.read,
   });
 
   const useReadByIdQuery = (id: string) =>
     useQuery({
       queryKey: ['user-defined-categories', id],
-      queryFn: () => UserDefinedCategoryApi.readById(id),
+      queryFn: () => UserDefinedLabelApi.readById(id),
     });
 
   const useCreateMutation = useMutation({
-    mutationFn: (data: UserDefinedCategory) => UserDefinedCategoryApi.create(data),
+    mutationFn: (data: UserDefinedLabel) => UserDefinedLabelApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-defined-categories'] });
     },
   });
 
   const useUpdateMutation = useMutation({
-    mutationFn: ({ id, data }: UpdateParams<UserDefinedCategory>) =>
-      UserDefinedCategoryApi.update({ id, data }),
+    mutationFn: ({ id, data }: UpdateParams<UserDefinedLabel>) =>
+      UserDefinedLabelApi.update({ id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-defined-categories'] });
     },
   });
 
   const useDeleteMutation = useMutation({
-    mutationFn: (id: string) => UserDefinedCategoryApi.delete(id),
+    mutationFn: (id: string) => UserDefinedLabelApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-defined-categories'] });
     },

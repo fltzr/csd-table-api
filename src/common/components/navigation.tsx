@@ -17,7 +17,7 @@ const NavigationMenu = () => {
       items={[
         {
           type: 'link',
-          href: '/table',
+          href: '/app/budget',
           text: 'Table',
         },
       ]}
