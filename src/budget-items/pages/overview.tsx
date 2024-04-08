@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
+import Input from '@cloudscape-design/components/input';
+
 import Table from '../../common/components/table';
+import { TableColumnDefinition } from '../../common/types/table';
 import { useBudgetItemCatalog } from '../hooks';
 import { BudgetItemSummary } from '../types';
-import { TableColumnDefinition } from '../../common/types/table';
-import Input from '@cloudscape-design/components/input';
 
 const budgetItemSummaryColumnDefinitions: TableColumnDefinition<BudgetItemSummary>[] = [
   {
@@ -20,6 +21,7 @@ const budgetItemSummaryColumnDefinitions: TableColumnDefinition<BudgetItemSummar
     header: 'Name',
     cell: (item) => item.name,
     width: 150,
+    isRowHeader: true,
     editConfig: {
       editingCell: (item, { currentValue, setValue }) => (
         <Input
@@ -109,13 +111,16 @@ const BudgetItemsOverview = () => {
       variant='borderless'
       localstorageKeyPrefix='BudgetItemsCatalog'
       resource='budget item'
+      onRefreshClick={() => {
+        budgetItemsCatalogApi.useReadQuery.refetch();
+      }}
       onSubmitEdit={(item, column, newValue) => {
-        // const columnId = String(column.id);
-        // const updatedItem = { [columnId]: newValue };
-        // if (isKeyOfBudgetItemSummary(columnId, item)) {
-        //   console.log(`Original item: ${JSON.stringify(item[columnId], null, 2)}`);
-        //   console.log(`Updated item: ${JSON.stringify(updatedItem, null, 2)}`);
-        // }
+        const columnId = String(column.id);
+        const updatedItem = { [columnId]: newValue };
+        if (isKeyOfBudgetItemSummary(columnId, item)) {
+          console.log(`Original item: ${JSON.stringify(item[columnId], null, 2)}`);
+          console.log(`Updated item: ${JSON.stringify(updatedItem, null, 2)}`);
+        }
       }}
     />
   );

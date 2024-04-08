@@ -80,6 +80,7 @@ const ReusableTable = <T extends { id: string }>({
   return (
     <Table<T>
       {...tableState.collectionProps}
+      enableKeyboardNavigation
       resizableColumns
       variant={props.variant}
       stickyHeader={props.stickyHeader}

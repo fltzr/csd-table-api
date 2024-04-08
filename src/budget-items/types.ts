@@ -1,3 +1,21 @@
+import { z } from 'zod';
+
+export const budgetItemSchema = z
+  .object({
+    name: z.string().min(3),
+    amount: z.number().min(0),
+  })
+  .partial();
+
+export const financeCategorySchema = z.object({
+  name: z.string().min(3),
+});
+
+export const userDefinedLabelSchema = z.object({
+  name: z.string().min(3),
+  color: z.string(),
+});
+
 export type BudgetItemSummary = {
   id: string;
   // The UUID of the budget item
